@@ -1,0 +1,1 @@
+export const URI = 'mongodb+srv://z9012-mky:z9012-mky@personal.l0sey.mongodb.net/Reservaciones?retryWrites=true&w=majority';
