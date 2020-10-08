@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 8080;
 app.set('port', PORT);
 
 // Conectando se la base de datos
-moongose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
+moongose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
   .then(() => {
     // Si la conexion es exitosa entonces iniciamos el servidor
     app.listen(app.get('port'), () => {
