@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Register } from "../controllers/Register";
+import { Login, Register } from "../controllers/Register";
 import { check, ValidationChain } from "express-validator";
 
 const app: Router = Router();
@@ -13,6 +13,7 @@ const validacionesRegistro: Array<ValidationChain> = [
                      .isLength({ min:6 }).withMessage('La contraseña debe tener al menos 6 caracteres') ]
 
 // Registro
-app.post('/register', validacionesRegistro ,Register)
+app.post('/register', validacionesRegistro ,Register);
+app.post('/login', Login);
 
 export default app;

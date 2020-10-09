@@ -2,7 +2,6 @@ import app from './app';
 import moongose from "mongoose";
 import { URI } from './config/configDB';
 
-
 const PORT = process.env.PORT || 8080;
 
 // Cambiando el puerto
