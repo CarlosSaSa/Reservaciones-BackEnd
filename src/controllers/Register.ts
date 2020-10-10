@@ -7,6 +7,7 @@ import { generarJWT, payload } from "../utils/jwt";
 import { ConvertToPayload } from "../utils/converts";
 
 export const Register = async (req: Request, res: Response): Promise<Response<any>> => {
+
     // Obtenemos los datos del body de la request
     const { nombre, apellido, correo, password } = req.body as IUser;
 
@@ -18,7 +19,7 @@ export const Register = async (req: Request, res: Response): Promise<Response<an
     // isEmpty()
     // entonces si el array de errores no esta vacio mandamos los mensajes de errores
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errores: errors.array() });
+        return res.status(400).json({ mensaje: 'Verifique bien sus datos' , errores: errors.array() });
     }
 
     // si no hay errores de validacion entonces hacemos la comprobacion de que no exista el usuario registrado con un email
@@ -31,7 +32,7 @@ export const Register = async (req: Request, res: Response): Promise<Response<an
         const UserExist = await UserModel.findOne({ correo }).exec();
         // si existe el elemento entonces el usuario ya existe
         if (UserExist) {
-            return res.status(200).json({ message: 'El usuario ya esta registrado' });
+            return res.status(406).json({ mensaje: 'El usuario ya esta registrado' });
         }
         // Si no esta registrado entonces lo guardamos, hay que encriptar la contraseña
         User.password = await hash(User.password, 10);
@@ -42,16 +43,23 @@ export const Register = async (req: Request, res: Response): Promise<Response<an
 
     } catch (error) {
         // si ha ocurrido un error
-        return res.status(200).json({ message: 'Ha ocurrido un error al registrar un usuario', error });
+        return res.status(500).json({ mensaje: 'Ha ocurrido un error al registrar un usuario', error });
     }
 
 }
 
 // Funcion para el login de usuario
-export const Login = async ( req: Request, res: Response ) => {
+export const Login = async ( req: Request, res: Response ): Promise < Response < any > > => {
 
     // Obtenemos del body el password y el correo
     const { correo, password } = req.body;
+
+    // validaciones de los campos
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ mensaje: 'Verifique bien sus datos', errores: errors.array() });
+    }
 
     // Tenemos que hacer la consulta para verificar que este registrado el usuario
     try {
@@ -59,7 +67,7 @@ export const Login = async ( req: Request, res: Response ) => {
 
         // si el variable UserExist es null entonces el usuario no esta registradi en caso contrario ya esta registrado
         if ( !UserExist ) {
-            return res.status(200).json({ message: 'El usuario y/o contraseña no son correctos' });
+            return res.status(406).json({ mensaje: 'El usuario y/o contraseña no son correctos' });
         }
 
         // si si existe el usuario entonces procedemos a verificar que la contraseña coincida
@@ -67,18 +75,15 @@ export const Login = async ( req: Request, res: Response ) => {
 
         // si la variable anterior es true entonces la contraseña es correcta
         if ( !IsSamePassword ) {
-            return res.status(200).json({ message: 'El usuario y/o contraseña no son correctos' });
+            return res.status(400).json({ mensaje: 'El usuario y/o contraseña no son correctos' });
         }
-
-        
-
        // si la contraseña coincidio entonces enviamos el token
-       const token = await generarJWT( ConvertToPayload( UserExist ) );
+       const token: string = await generarJWT( ConvertToPayload( UserExist ) );
         // hasta este punto la autenticacion ha sido un exito entonces procedemos a enviar el JWT
-        return res.status(200).json({ message: 'Hello world', token });
+        return res.status(200).json({ mensaje: 'Login correcto', token });
 
     } catch (error) {
-        return res.status(200).json({ message: 'Ha ocurrido un error al iniciar sesion', error });
+        return res.status(500).json({ mensaje: 'Ha ocurrido un error al iniciar sesion', error });
     }
 
 
