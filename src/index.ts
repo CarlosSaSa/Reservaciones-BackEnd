@@ -1,6 +1,10 @@
 import app from './app';
 import moongose from "mongoose";
 import { URI } from './config/configDB';
+import moment from "moment";
+import 'moment/locale/es-mx';
+
+moment.locale('es-mx');
 
 const PORT = process.env.PORT || 8080;
 

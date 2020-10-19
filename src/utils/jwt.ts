@@ -1,8 +1,6 @@
 // funcion para generar el token dado un payload
 import { sign, SignOptions } from "jsonwebtoken";
 import { secretKey } from "../config/configJWT";
-import moment from 'moment';
-
 
 export interface payload {
     _id: string;

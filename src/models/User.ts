@@ -1,8 +1,6 @@
 import { Schema, model, SchemaDefinition, Document } from "mongoose";
 import moment from "moment";
 
-moment.locale('es-mx');
-
 // Interfaz para definir el tipo de dato del modelo
 export interface IUser {
     nombre: string;
@@ -36,31 +34,15 @@ const UserDefinition: SchemaDefinition = {
         required: true 
     },
     fecha_creacion: { 
-        type: String,
-        default: moment().format('LLLL')
+        type: Date
     },
     fecha_actualizacion: { 
-        type: String,
+        type: Date,
     }
 }
 
 // definiendo el esquema
-const userSchema = new Schema( UserDefinition);
-
-// Metodos de esquema
-userSchema.pre< IUserModel>('save', function (next){
-     // este metodo sirve para actualizar la fecha de actualizacion
-     // para ambos casos cuando se cree o se actualice necesitaremos la fecha actual
-     this.fecha_actualizacion = moment().format('LLLL');
-
-    // antes que se guarde el documento pero cuando se actualice entonces igual se actualizará la contraseña
-    // entonces para hacer esto tenemos que verificar una condicion
-    
-    // TODO: Verificar el comportamiento cuando se actualiza si es que funciona
-
-     next();
-})
-
+const userSchema = new Schema( UserDefinition, { timestamps: { createdAt: 'fecha_creacion', updatedAt: 'fecha_actualizacion' } });
 
 // Creando el modelo
 export const UserModel = model<IUserModel>('Usuarios', userSchema);
