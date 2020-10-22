@@ -4,7 +4,7 @@
 
 import { Router } from "express";
 import { body } from "express-validator";
-import { crearReservacion, obtenerReservaciones } from "../controllers/User";
+import { crearReservacion, getAllClassRoom, getAllReservations, getClassRoomById, obtenerReservaciones } from "../controllers/User";
 import { AuthUser, customDateVerify } from "../middlewares/user";
 
 
@@ -21,5 +21,8 @@ const arrayValidator = [ body('salon').notEmpty().withMessage('El id del salon e
 // metodo para poder insertar un registro de un evento es decir una reservacion
 app.post('/crearReservacion', arrayValidator ,crearReservacion );
 app.get('/obtenerReservaciones', AuthUser, obtenerReservaciones  );
+app.get('/getAllReservations', getAllReservations);
+app.get('/obtenerSalon/:id', getClassRoomById);
+app.get('/obtenerSalones', getAllClassRoom );
 
 export default app;
