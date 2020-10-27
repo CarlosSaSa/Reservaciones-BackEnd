@@ -4,7 +4,7 @@
 
 import { Router } from "express";
 import { body } from "express-validator";
-import { crearReservacion, getAllClassRoom, getAllReservations, getClassRoomById, obtenerReservaciones } from "../controllers/User";
+import { crearReservacion, deleteReservation, getAllClassRoom, getAllReservations, getClassRoomById, getReservationsPersonal, obtenerReservaciones, updateReservation } from "../controllers/User";
 import { AuthUser, customDateVerify } from "../middlewares/user";
 
 
@@ -24,5 +24,8 @@ app.get('/obtenerReservaciones', AuthUser, obtenerReservaciones  );
 app.get('/getAllReservations', getAllReservations);
 app.get('/obtenerSalon/:id', getClassRoomById);
 app.get('/obtenerSalones', getAllClassRoom );
+app.get('/obtenerHorarioPersonal', AuthUser ,getReservationsPersonal);
+app.put('/updateReservation', arrayValidator ,updateReservation);
+app.delete('/deleteReservation/:id', AuthUser, deleteReservation);
 
 export default app;

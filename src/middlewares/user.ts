@@ -23,7 +23,7 @@ export const AuthUser = ( req: Request, res: Response, next: NextFunction ) => {
     const token = req.headers.authorization;
     // si el token viene nulo entonces no se avanza
     if (!token) {
-        return res.status(400).json({ mensaje: 'El token no ha sido encontrado' });
+        return res.status(401).json({ mensaje: 'El token no ha sido encontrado' });
     }
     // verificamos si es un token valido
     try {
@@ -38,7 +38,7 @@ export const AuthUser = ( req: Request, res: Response, next: NextFunction ) => {
             return res.status(401).json({ mensaje: 'El token ha expirado' })
         } 
         // cualquier otro caso es un token manipulado, etc
-        return res.status(400).json({ mensaje: 'Token invalido' });
+        return res.status(401).json({ mensaje: 'Token invalido' });
     }
 
 }
